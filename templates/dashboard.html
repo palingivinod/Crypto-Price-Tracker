@@ -13,14 +13,22 @@
             <h1>CryptoPrice Tracking</h1>
         </div>
         <nav>
-            <a href="/" class="nav-link active"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="/" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
             <a href="/history" class="nav-link"><i class="fas fa-history"></i> History</a>
             <a href="/alerts" class="nav-link"><i class="fas fa-bell"></i> Alerts</a>
+
+            {% if users and users.get(username) and users[username].role == 'admin' %}
+                <a href="/admin" class="nav-link">
+                    <i class="fas fa-user-shield"></i> Admin
+                </a>
+            {% endif %}
+
             <div class="user-info">
                 <span class="username">{{ username }}</span>
                 <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
             </div>
         </nav>
+
     </header>
 
     <div class="dashboard-container">

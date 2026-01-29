@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel | CryptoPredict</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .admin-container {
+            padding: 30px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .admin-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .admin-card {
+            background: #0f172a;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .admin-card h3 {
+            margin: 0;
+            color: #38bdf8;
+            font-size: 1.4rem;
+        }
+
+        .admin-card p {
+            color: #cbd5f5;
+            margin-top: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #020617;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+        }
+
+        th {
+            background: #020617;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        tr {
+            border-bottom: 1px solid #1e293b;
+        }
+
+        tr:hover {
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .online { background: #10b981; color: white; }
+        .offline { background: #ef4444; color: white; }
+        .admin { background: #6366f1; color: white; }
+        .user { background: #64748b; color: white; }
+
+        .btn-delete {
+            background: #ef4444;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-container">
+
+    <h2 style="margin-bottom:20px;">👑 Admin Dashboard</h2>
+
+    <!-- SUMMARY CARDS -->
+    <div class="admin-cards">
+        <div class="admin-card">
+            <h3>{{ users|length }}</h3>
+            <p>Total Users</p>
+        </div>
+
+        <div class="admin-card">
+            <h3>
+                {{ users.values() | selectattr("is_logged_in") | list | length }}
+            </h3>
+            <p>Online Users</p>
+        </div>
+
+        <div class="admin-card">
+            <h3>
+                {{ users.values() | selectattr("role", "equalto", "admin") | list | length }}
+            </h3>
+            <p>Admins</p>
+        </div>
+    </div>
+
+    <!-- USERS TABLE -->
+    <table>
+        <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for email, data in users.items() %}
+        <tr>
+            <td>{{ email }}</td>
+            <td>
+                <span class="badge {{ data.role }}">
+                    {{ data.role | capitalize }}
+                </span>
+            </td>
+            <td>
+                {% if data.is_logged_in %}
+                    <span class="badge online">Online</span>
+                {% else %}
+                    <span class="badge offline">Offline</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if email != username %}
+                <form method="post" action="/admin/delete/{{ email }}">
+                    <button class="btn-delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</body>
+</html>

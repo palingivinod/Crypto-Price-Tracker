@@ -66,6 +66,7 @@ app.secret_key = "crypto_secret_key"
 users = {}            # {email: password}
 alerts = {}           # {email: [{coin, threshold}]}
 price_history = {}    # {coin: [{time, price}]}
+ADMIN_EMAIL = "admin@crypto.com"
 
 
 @app.route("/")
@@ -79,14 +80,25 @@ def register():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
+        role = request.form.get("role", "user")
 
         if email in users:
-            return "User already exists!"
+            return render_template(
+                "register.html",
+                error="User already exists"
+            )
 
-        users[email] = password
+        users[email] = {
+            "password": password,
+            "role": role,
+            "is_logged_in": False
+        }
+
         return redirect(url_for("index"))
 
     return render_template("register.html")
+
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -94,24 +106,34 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
 
-        if email in users and users[email] == password:
+        if email in users and users[email]["password"] == password:
             session["user"] = email
+            users[email]["is_logged_in"] = True
             return redirect(url_for("dashboard"))
 
-        return "Invalid credentials!"
+        return render_template(
+            "login.html",
+            error="Invalid email or password"
+        )
 
-    # GET request → show login page
     return render_template("login.html")
+
 
 
 @app.route("/logout")
 def logout():
+    email = session.get("user")
+    if email and email in users:
+        users[email]["is_logged_in"] = False
+
     session.pop("user", None)
     return redirect(url_for("index"))
+
 
 # =========================
 # DASHBOARD
 # =========================
+
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
@@ -120,8 +142,50 @@ def dashboard():
     return render_template(
         "dashboard.html",
         username=session["user"],
-        alerts=alerts.get(session["user"], [])
+        users=users
     )
+
+@app.route("/admin")
+def admin_dashboard():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    email = session["user"]
+
+    # role-based access
+    if users.get(email, {}).get("role") != "admin":
+        return "Unauthorized", 403
+
+    return render_template(
+        "admin.html",
+        users=users,
+        username=email
+    )
+
+
+@app.route("/admin/delete/<email>", methods=["POST"])
+def admin_delete_user(email):
+    # must be logged in
+    if "user" not in session:
+        return "Unauthorized", 403
+
+    current_user = session["user"]
+
+    # role-based check (FINAL & CORRECT)
+    if users.get(current_user, {}).get("role") != "admin":
+        return "Unauthorized", 403
+
+    # admin should not delete himself
+    if email == current_user:
+        return redirect(url_for("admin_dashboard"))
+
+    # delete user
+    if email in users:
+        users.pop(email)
+        alerts.pop(email, None)
+
+    return redirect(url_for("admin_dashboard"))
+
 
 
 @app.route("/prices")
@@ -208,8 +272,8 @@ def alerts_data():
     return jsonify({"status": "created"})
 
 
-@app.route("/alerts/<alert_id>", methods=["DELETE", "PUT"])
-def modify_alert(alert_id):
+@app.route("/alerts/data/<alert_id>", methods=["DELETE", "PUT"])
+def modify_alert_api(alert_id):
     email = session.get("user")
     if not email:
         return jsonify({"error": "unauthorized"}), 401
@@ -227,8 +291,9 @@ def modify_alert(alert_id):
         for a in user_alerts:
             if a["id"] == alert_id:
                 a["price"] = data["price"]
-                a["condition"] = data["condition"]
+                a["condition"] = data.get("condition", a["condition"])
         return jsonify({"status": "updated"})
+
 
 
 @app.route("/history")

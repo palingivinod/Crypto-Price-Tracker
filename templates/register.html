@@ -380,6 +380,14 @@
                 
                 <form method="POST" action="/register" id="registerForm">
                     <div class="form-group">
+                        <label class="form-label">Register As</label>
+                        <select name="role" class="form-select" required>
+                            <option value="user">Normal User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-envelope"></i> Email Address
                         </label>
@@ -390,6 +398,7 @@
                     </div>
                     
                     <div class="form-group">
+
                         <label class="form-label">
                             <i class="fas fa-lock"></i> Password
                         </label>
@@ -485,55 +494,61 @@
     
     <script>
         function togglePassword(fieldId) {
-            const passwordInput = document.getElementById(fieldId);
-            const toggleIcon = document.querySelector(`#${fieldId}`).parentNode.querySelector('.password-toggle i');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
+            const input = document.getElementById(fieldId);
+            input.type = input.type === 'password' ? 'text' : 'password';
         }
-        
+
+        function updateRequirement(el, met) {
+            el.className = met ? 'requirement met' : 'requirement unmet';
+        }
+
         function checkPasswordStrength() {
             const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const strengthFill = document.getElementById('strengthFill');
+            const confirm = document.getElementById('confirmPassword').value;
+
+            const fill = document.getElementById('strengthFill');
             const reqLength = document.getElementById('reqLength');
-            const reqUppercase = document.getElementById('reqUppercase');
-            const reqNumber = document.getElementById('reqNumber');
-            const reqSpecial = document.getElementById('reqSpecial');
-            const passwordMatch = document.getElementById('passwordMatch');
-            const passwordMismatch = document.getElementById('passwordMismatch');
-            
-            // Check requirements
+            const reqUpper = document.getElementById('reqUppercase');
+            const reqNum = document.getElementById('reqNumber');
+            const reqSpec = document.getElementById('reqSpecial');
+
             const hasLength = password.length >= 8;
-            const hasUppercase = /[A-Z]/.test(password);
-            const hasNumber = /[0-9]/.test(password);
-            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-            
-            // Update requirement indicators
+            const hasUpper = /[A-Z]/.test(password);
+            const hasNum = /[0-9]/.test(password);
+            const hasSpec = /[^A-Za-z0-9]/.test(password);
+
             updateRequirement(reqLength, hasLength);
-            updateRequirement(reqUppercase, hasUppercase);
-            updateRequirement(reqNumber, hasNumber);
-            updateRequirement(reqSpecial, hasSpecial);
-            
-            // Calculate strength score
+            updateRequirement(reqUpper, hasUpper);
+            updateRequirement(reqNum, hasNum);
+            updateRequirement(reqSpec, hasSpec);
+
             let score = 0;
             if (hasLength) score += 25;
-            if (hasUppercase) score += 25;
-            if (hasNumber) score += 25;
-            if (hasSpecial) score += 25;
-            
-            // Update strength bar
-            strengthFill.style.width = `${score}%`;
-            
-            // Update color based on score
-            if (score < 50) {
-                strengthFill.style.background = '#ef4444'; // Red
-            } else if (score < 75) {
-                strength
+            if (hasUpper) score += 25;
+            if (hasNum) score += 25;
+            if (hasSpec) score += 25;
+
+            fill.style.width = score + '%';
+            fill.style.background =
+                score < 50 ? '#ef4444' :
+                score < 75 ? '#f59e0b' :
+                '#10b981';
+
+            // password match
+            const match = document.getElementById('passwordMatch');
+            const mismatch = document.getElementById('passwordMismatch');
+
+            if (confirm.length > 0) {
+                if (password === confirm) {
+                    match.style.display = 'block';
+                    mismatch.style.display = 'none';
+                } else {
+                    match.style.display = 'none';
+                    mismatch.style.display = 'block';
+                }
+            }
+        }
+        </script>
+
+    </body>
+</html>

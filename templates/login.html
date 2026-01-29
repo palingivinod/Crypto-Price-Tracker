@@ -351,30 +351,13 @@
       <div class="auth-left">
         <div class="auth-logo">
           <i class="fas fa-chart-line auth-logo-icon"></i>
-          <span class="auth-logo-text">CryptoPredict Pro</span>
+          <span class="auth-logo-text">CryptoPrice Tracker</span>
         </div>
-
-        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text)">
-          AI-Powered Crypto Predictions
-        </h2>
-        <p
-          style="color: var(--text-light); font-size: 1.1rem; line-height: 1.6"
-        >
-          Access real-time cryptocurrency price predictions powered by advanced
-          machine learning algorithms.
-        </p>
 
         <div class="auth-features">
           <div class="feature">
-            <div class="feature-icon">
-              <i class="fas fa-robot"></i>
-            </div>
-            <div>
-              <h4>AI Predictions</h4>
-              <p style="margin-top: 5px; font-size: 0.95rem">
-                87% accurate price forecasts
-              </p>
-            </div>
+           
+            
           </div>
 
           <div class="feature">
@@ -484,7 +467,7 @@
               >
             </div>
 
-            <button type="submit" class="btn-auth">
+            <button type="submit" class="btn-auth" onclick="auth()">
               <i class="fas fa-sign-in-alt"></i> Sign In
             </button>
 
@@ -521,5 +504,12 @@
       });
       
     </script>
+    
+    {% if error %}
+    <script>
+        alert("{{ error }}");
+    </script>
+    {% endif %}
+
   </body>
 </html>
