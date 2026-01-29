@@ -1,0 +1,115 @@
+
+
+<html>
+<head>
+    <title>Crypto Tracker - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-chart-line logo-icon"></i>
+            <h1>CryptoPrice Tracking</h1>
+        </div>
+        <nav>
+            <a href="/" class="nav-link active"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="/history" class="nav-link"><i class="fas fa-history"></i> History</a>
+            <a href="/alerts" class="nav-link"><i class="fas fa-bell"></i> Alerts</a>
+            <div class="user-info">
+                <span class="username">{{ username }}</span>
+                <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h2>Live Cryptocurrency Tracking</h2>
+            <div class="time-filter">
+                <button class="time-btn active">24H</button>
+                <button class="time-btn">7D</button>
+                <button class="time-btn">1M</button>
+                <button class="time-btn">1Y</button>
+            </div>
+        </div>
+
+        <div class="crypto-cards">
+            <div class="crypto-card">
+                <div class="card-header">
+                    <div class="coin-info">
+                        <div class="coin-icon">BTC</div>
+                        <div class="coin-name">
+                            <h3>Bitcoin</h3>
+                            <span class="coin-symbol">BTC/USD</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="current-price" id="btc">$64,328.45</div>
+                
+            </div>
+
+            <div class="crypto-card">
+                <div class="card-header">
+                    <div class="coin-info">
+                        <div class="coin-icon">ETH</div>
+                        <div class="coin-name">
+                            <h3>Ethereum</h3>
+                            <span class="coin-symbol">ETH/USD</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="current-price" id="eth">$3,245.67</div>
+                
+            </div>
+        </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">API Docs</a>
+                <a href="#" class="footer-link">Support</a>
+            </div>
+            <div class="copyright">
+                © 2024 CryptoPredict Pro. All predictions are based on AI analysis.
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/prices.js') }}"></script>
+</body>
+</html>
+
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History | Crypto Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+    <h2>Price History</h2>
+    <nav>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/alerts">Alerts</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div>
+    <button onclick="changeCoin('bitcoin')">Bitcoin</button>
+    <button onclick="changeCoin('ethereum')">Ethereum</button>
+</div>
+
+<canvas id="cryptoChart"></canvas>
+
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
+</body>
+</html>
+-->

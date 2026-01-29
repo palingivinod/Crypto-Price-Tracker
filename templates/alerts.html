@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CryptoPredict - Alerts</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <i class="fas fa-bell logo-icon"></i>
+        <h1>CryptoPredict Alerts</h1>
+    </div>
+    <nav>
+        <a href="/" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="/history" class="nav-link"><i class="fas fa-history"></i> History</a>
+        <a href="/alerts" class="nav-link active"><i class="fas fa-bell"></i> Alerts</a>
+        <div class="user-info">
+            <span class="username">{{ username }}</span>
+            <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
+        </div>
+    </nav>
+</header>
+
+<div class="alerts-container">
+    <div class="alerts-header">
+        <h2>Price Alert Management</h2>
+        <button class="btn btn-primary" onclick="showAlertForm()">
+            <i class="fas fa-plus"></i> New Alert
+        </button>
+    </div>
+
+    <!-- ALERT FORM -->
+    <div class="form-box" id="alertForm" style="display: none;">
+        <h2>Set Price Alert</h2>
+
+        <!-- IMPORTANT: no default form submit -->
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <label class="form-label">Cryptocurrency</label>
+                <select name="coin" class="form-select" required>
+                    <option value="">Select Coin</option>
+                    <option value="bitcoin">Bitcoin (BTC)</option>
+                    <option value="ethereum">Ethereum (ETH)</option>
+                    <option value="solana">Solana (SOL)</option>
+                    <option value="cardano">Cardano (ADA)</option>
+                    <option value="ripple">Ripple (XRP)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Alert Condition</label>
+                <select name="condition" class="form-select" required>
+                    <option value="above">When price goes above</option>
+                    <option value="below">When price goes below</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Target Price (USD)</label>
+                <input type="number" name="price" class="form-input"
+                       placeholder="e.g., 65000" step="0.01" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Save Alert
+            </button>
+        </form>
+    </div>
+
+    <!-- ALERTS WILL BE RENDERED HERE BY JS -->
+    <div class="alerts-list"></div>
+</div>
+
+<script>
+    function showAlertForm() {
+        document.getElementById('alertForm').style.display = 'block';
+    }
+</script>
+
+ <script src="{{ url_for('static', filename='js/alerts.js') }}"></script>
+
+</body>
+</html>

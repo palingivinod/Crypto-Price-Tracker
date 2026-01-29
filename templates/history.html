@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cryptocurrency - History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-chart-bar logo-icon"></i>
+            <h1>Cryptocurrency History</h1>
+        </div>
+        <nav>
+            <a href="/" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="/history" class="nav-link active"><i class="fas fa-history"></i> History</a>
+            <a href="/alerts" class="nav-link"><i class="fas fa-bell"></i> Alerts</a>
+            <div class="user-info">
+                <span class="username">{{username}}</span>
+                <a href="/logout" class="btn btn-secondary btn-sm">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="history-container">
+        <div class="chart-controls">
+            <div class="coin-selector">
+                <button class="coin-btn active" onclick="changeCoin('btc')">BTC</button>
+                <button class="coin-btn" onclick="changeCoin('eth')">ETH</button>
+                <button class="coin-btn" onclick="changeCoin('sol')">SOL</button>
+                <button class="coin-btn" onclick="changeCoin('ada')">ADA</button>
+            </div>
+            <div class="time-filter">
+                <button class="time-btn active">1W</button>
+                <button class="time-btn">1M</button>
+                <button class="time-btn">3M</button>
+                <button class="time-btn">1Y</button>
+                <button class="time-btn">ALL</button>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="cryptoChart"></canvas>
+        </div>
+
+        
+    </div>
+
+    <script src="{{ url_for('static', filename='js/history.js') }}"></script>
+    <script>
+        // Chart initialization code would go here
+        function changeCoin(coin) {
+            // Update active button
+            document.querySelectorAll('.coin-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            // Load new chart data
+            console.log('Loading data for:', coin);
+        }
+    </script>
+</body>
+</html>
