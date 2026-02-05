@@ -644,9 +644,9 @@ nav {
 footer {
     background: rgba(2, 6, 23, 0.9);
     backdrop-filter: blur(10px);
-    padding: 2rem 2.5rem;
-    margin-top: 4rem;
-    border-top: 1px solid var(--border);
+    padding: 2rem 1rem;
+    margin-top: 13rem;
+    border-top: 2px solid var(--border);
 }
 
 .footer-content {
@@ -654,7 +654,7 @@ footer {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: 4rem;
 }
 
 .footer-links {

@@ -17,7 +17,7 @@ USERS_TABLE = dynamodb.Table("Users")
 ALERTS_TABLE = dynamodb.Table("Alerts")
 HISTORY_TABLE = dynamodb.Table("PriceHistory")
 
-# 🔔 REPLACE WITH YOUR ARN
+
 SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:123456789012:crypto-price-alerts"
 
 
